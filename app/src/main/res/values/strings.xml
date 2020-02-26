@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Clientes Gilbarco</string>
+    <string name="navigation_drawer_open">Abrir menu de navegação</string>
+    <string name="navigation_drawer_close">Fechar menu de navegação</string>
+    <string name="nav_header_title">Clientes Gilbarco</string>
+    <string name="nav_header_subtitle">gilbarco@gilbarco.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="label_list_users">Clientes</string>
+    <string name="label_list_country">Países</string>
+    <string name="label_add_country">Adiciona País</string>
+    <string name="label_add_user">Adiciona Cliente</string>
+    <string name="name">Nome</string>
+    <string name="code">Código</string>
+    <string name="description">Descrição</string>
+    <string name="bt_register">Salvar</string>
+    <string name="label_configurations">Configurações</string>
+    <string name="cnpj">CNPJ</string>
+    <string name="razao_social">Razão Social</string>
+    <string name="country">País</string>
+</resources>
