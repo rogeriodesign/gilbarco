@@ -8,13 +8,23 @@ import br.com.gilbarco.clientes.model.UserRepository
 import br.com.gilbarco.clientes.model.model.User
 import br.com.gilbarco.clientes.ui.register_user.RegisterUserContract
 
-class UserPresenter (context: Context): RegisterUserContract.PresenterImpl {
+class UserPresenter (val context: Context): RegisterUserContract.PresenterImpl {
     private val userRepositiry = UserRepository(context)
 
     fun getAll(): LiveData<Resource<List<User>?>> {
         val liveData = MutableLiveData<Resource<List<User>?>>()
 
         userRepositiry.get(whenSuccess = {
+            liveData.value = Resource(it)
+        })
+
+        return liveData
+    }
+
+    fun getAllWithCountry(): LiveData<Resource<List<User>?>> {
+        val liveData = MutableLiveData<Resource<List<User>?>>()
+
+        userRepositiry.getWithCountry(whenSuccess = {
             liveData.value = Resource(it)
         })
 

@@ -8,8 +8,13 @@ import br.com.gilbarco.clientes.model.model.Country
 class ListCountryViewModel: ViewModel() {
 
     val countries = MutableLiveData<List<Country>>()
+    val countrySelected = MutableLiveData<Country>()
 
     fun getCountries(): LiveData<List<Country>> {
         return countries
+    }
+
+    fun getCountrySelected(): LiveData<Country> {
+        return countrySelected
     }
 }

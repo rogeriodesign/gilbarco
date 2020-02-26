@@ -9,8 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.User
 
-class ListUsersAdapter(val context: Context, private var users: List<User>): RecyclerView.Adapter<ListUsersAdapter.UserViewHolder>() {
-
+class ListUsersAdapter(val context: Context): RecyclerView.Adapter<ListUsersAdapter.UserViewHolder>() {
+    private val itemsList = ArrayList<User>()
+    var items: List<User>?
+        get() = itemsList
+        set(value) {
+            itemsList.clear()
+            if (value != null && value.isNotEmpty()) {
+                itemsList.addAll(value)
+            }
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -21,10 +30,10 @@ class ListUsersAdapter(val context: Context, private var users: List<User>): Rec
         return UserViewHolder(viewCreate)
     }
 
-    override fun getItemCount() = users.size
+    override fun getItemCount() = items?.size ?: 0
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val user = users[position]
+        val user = itemsList[position]
         holder.bind(user)
     }
 
@@ -39,7 +48,11 @@ class ListUsersAdapter(val context: Context, private var users: List<User>): Rec
 
         private fun fillField(user: User) {
             name.text = user.name
-            cnpj.text = user.cnpj
+            if(user.country != null){
+                cnpj.text = user.country
+            } else {
+                cnpj.text = user.cnpj
+            }
         }
     }
 }

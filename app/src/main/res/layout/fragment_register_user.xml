@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -63,23 +64,25 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <TextView
             android:id="@+id/activity_form_register_user_country"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:text=""
             app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
             app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
-            app:layout_constraintTop_toBottomOf="@+id/activity_form_register_user_cnpj">
+            app:layout_constraintTop_toBottomOf="@+id/activity_form_register_user_cnpj" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:hint="@string/country"
-                android:importantForAutofill="no"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/fragment_form_bt_country"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/bt_country"
+            android:background="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
+            app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
+            app:layout_constraintTop_toBottomOf="@id/activity_form_register_user_country" />
 
         <Button
             android:id="@+id/fragment_form_bt_register"
@@ -90,7 +93,7 @@
             android:background="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
             app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
-            app:layout_constraintTop_toBottomOf="@id/activity_form_register_user_country" />
+            app:layout_constraintTop_toBottomOf="@id/fragment_form_bt_country" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,14 +1,17 @@
 package br.com.gilbarco.clientes.model.database.dao
 
 import androidx.room.*
+//import br.com.gilbarco.clientes.model.model.DataUserCountry
 import br.com.gilbarco.clientes.model.model.User
+import br.com.gilbarco.clientes.model.model.UserCountry
 
 @Dao
 interface UserDAO {
-    @Query("SELECT User.*, Country.id AS countryId, Country.code AS countryCode, Country.name AS countryName, Country.description AS countryDescription FROM User " +
-                "INNER JOIN Country ON Country.id = User.countryId " +
-                "ORDER BY id DESC")
+    @Query("SELECT * FROM users ORDER BY user_id DESC")
     fun getAll(): List<User>
+
+    @Query("SELECT * FROM users ORDER BY user_id DESC")
+    fun getAllCountry(): List<UserCountry>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(user: User)
@@ -16,8 +19,13 @@ interface UserDAO {
     @Delete
     fun remove(user: User)
 
-    @Query("SELECT User.*, Country.id AS countryId, Country.code AS countryCode, Country.name AS countryName, Country.description AS countryDescription FROM User " +
-            "INNER JOIN Country ON Country.id = User.countryId " +
-            "WHERE Country.id = :id")
-    fun findForId(id: Long): User?
+    /*@Query("SELECT * FROM UserCountry " +
+            "INNER JOIN User ON User.id = UserCountry.userId " +
+            "INNER JOIN Country ON Country.id = UserCountry.countryId " +
+            "WHERE UserCountry.userId = :id")
+    fun findForId(id: Long): DataUserCountry?*/
+
+    @Query("SELECT * FROM users " +
+            "WHERE user_id = :id")
+    fun findForId(id: Long): UserCountry?
 }

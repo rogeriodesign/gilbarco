@@ -9,8 +9,8 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import br.com.gilbarco.clientes.R
-import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.model.model.User
 import br.com.gilbarco.clientes.presenter.UserPresenter
 import br.com.gilbarco.clientes.ui.alert
@@ -75,8 +75,8 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
         setBtRegister(root)
     }
 
-    private fun setBtCountry(root: View) = root.activity_form_register_user_country.setOnClickListener {
-
+    private fun setBtCountry(root: View) = root.fragment_form_bt_country.setOnClickListener {
+        findNavController().navigate(R.id.action_nav_add_user_to_nav_list_countries)
     }
 
     private fun setBtRegister(root: View) = root.fragment_form_bt_register.setOnClickListener {

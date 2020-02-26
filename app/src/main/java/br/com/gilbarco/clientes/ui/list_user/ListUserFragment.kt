@@ -49,13 +49,14 @@ class ListUserFragment : Fragment() {
 
     private fun setAdapter(users: List<User>, rw: RecyclerView) {
         context?.let {
-            val adapter = ListUsersAdapter(it, users)
+            val adapter = ListUsersAdapter(it)
+            adapter.items = users
             rw.adapter = adapter
         }
     }
 
     private fun getAllUsers(){
-        presenter.getAll().observe(viewLifecycleOwner, Observer {
+        presenter.getAllWithCountry().observe(viewLifecycleOwner, Observer {
             if (it.error == null) {
                 model.users.postValue(it.data)
                 //setRecyclerView()

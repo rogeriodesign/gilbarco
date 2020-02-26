@@ -5,7 +5,7 @@ import br.com.gilbarco.clientes.model.model.Country
 
 @Dao
 interface CountryDAO {
-    @Query("SELECT * FROM Country ORDER BY id DESC")
+    @Query("SELECT * FROM countries ORDER BY id DESC")
     fun getAll(): List<Country>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -14,6 +14,6 @@ interface CountryDAO {
     @Delete
     fun remove(country: Country)
 
-    @Query("SELECT * FROM Country WHERE id = :id")
+    @Query("SELECT * FROM countries WHERE id = :id")
     fun findForId(id: Long): Country?
 }

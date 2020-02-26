@@ -8,7 +8,7 @@ import br.com.gilbarco.clientes.model.Resource
 import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.ui.register_country.RegisterCountryContract
 
-class CountryPresenter (context: Context): RegisterCountryContract.PresenterImpl {
+class CountryPresenter (val context: Context): RegisterCountryContract.PresenterImpl {
     private val countryRepositiry = CountryRepositiry(context)
 
     fun getAll(): LiveData<Resource<List<Country>?>> {

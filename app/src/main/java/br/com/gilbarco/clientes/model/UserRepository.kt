@@ -7,13 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import br.com.gilbarco.clientes.model.asynctask.BaseAsyncTask
 import br.com.gilbarco.clientes.model.database.AppDatabase
 import br.com.gilbarco.clientes.model.database.dao.UserDAO
+import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.model.model.User
+import br.com.gilbarco.clientes.model.model.UserCountry
 
-class UserRepository(
-    private val context: Context
-) {
+class UserRepository(private val context: Context){
     private val dao = AppDatabase.getInstance(context).userDAO
-
 
     fun save(
         user: User,
@@ -48,13 +47,30 @@ class UserRepository(
         }).execute()
     }
 
+    fun getWithCountry(
+        whenSuccess: (List<User>) -> Unit
+    ) {
+        var list: MutableList<User> = mutableListOf()
+        BaseAsyncTask(whenExecuted = {
+            val l = dao.getAllCountry()
+            for (i in l) {
+                list.add(i.bind())
+            }
+        }, whenEnded = {
+            whenSuccess(list as List<User>)
+        }).execute()
+    }
+
     fun find(
         id: Long,
         whenSuccess: (User?) -> Unit
     ) {
         var user: User? = null
         BaseAsyncTask(whenExecuted = {
-            user = dao.findForId(id)
+            val userCountry: UserCountry? = dao.findForId(id)
+            userCountry?.let {
+                user = it.bind()
+            }
         }, whenEnded = {
             whenSuccess(user)
         }).execute()
