@@ -1,7 +1,6 @@
 package br.com.gilbarco.clientes.ui.register_country
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.Country
-import br.com.gilbarco.clientes.presenter.CountryPresenter
+import br.com.gilbarco.clientes.ui.RegisterCountryViewModelFactory
+import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
 import br.com.gilbarco.clientes.ui.afterTextChanged
 import br.com.gilbarco.clientes.ui.alert
 import br.com.gilbarco.clientes.ui.validator.ValidatesDefault
@@ -19,10 +19,9 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_register_country.*
 import kotlinx.android.synthetic.main.fragment_register_country.view.*
 
-class RegisterCountryFragment : Fragment(), RegisterCountryContract.ViewImpl {
+class RegisterCountryFragment : Fragment() {
     private val validators = ArrayList<Validator>()
     private lateinit var model: RegisterCountryViewModel
-    private lateinit var presenter: CountryPresenter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,10 +29,6 @@ class RegisterCountryFragment : Fragment(), RegisterCountryContract.ViewImpl {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_register_country, container, false)
-        //val textView: TextView = root.findViewById(R.id.text_send)
-        context?.let {
-            presenter = CountryPresenter(it)
-        }
 
         setViewModel()
         setFields(root)
@@ -47,7 +42,24 @@ class RegisterCountryFragment : Fragment(), RegisterCountryContract.ViewImpl {
     }
 
     private fun setViewModel() {
-        model = ViewModelProvider(this, RegisterCountryViewModelFactory()).get(RegisterCountryViewModel::class.java)
+        activity?.let {activity ->
+            context?.let{
+                model = ViewModelProvider(activity,
+                    RegisterCountryViewModelFactory(it)
+                ).get(RegisterCountryViewModel::class.java)
+                model.init()
+            }
+        }
+        model.saveResult.observe(viewLifecycleOwner, Observer { resource ->
+            if (resource.error == null) {
+                fillForm()
+                resource.data?.let{
+                    alert("Sucesso", it)
+                }
+            } else {
+                alert("Falha", resource.error)
+            }
+        })
     }
 
     private fun fillForm() {
@@ -119,15 +131,7 @@ class RegisterCountryFragment : Fragment(), RegisterCountryContract.ViewImpl {
     }
 
     private fun save(country: Country) {
-        presenter.save(country).observe(viewLifecycleOwner, Observer {
-            if (it.error == null) {
-                model.country.postValue(null)
-                fillForm()
-                alert("Sucesso", "País ${country.name} gravado com sucesso")
-            } else {
-                alert("Falha", "Não foi possivél gravar o país ${country.name}.\n ${it.error}")
-            }
-        })
+        model.save(country)
     }
 
 }

@@ -6,30 +6,29 @@ import androidx.lifecycle.MutableLiveData
 import br.com.gilbarco.clientes.model.CountryRepositiry
 import br.com.gilbarco.clientes.model.Resource
 import br.com.gilbarco.clientes.model.model.Country
-import br.com.gilbarco.clientes.ui.register_country.RegisterCountryContract
+import br.com.gilbarco.clientes.ui.RegisterCountryContract
 
 class CountryPresenter (val context: Context): RegisterCountryContract.PresenterImpl {
+
+    private lateinit var viewMain: RegisterCountryContract.ViewImpl
     private val countryRepositiry = CountryRepositiry(context)
 
-    fun getAll(): LiveData<Resource<List<Country>?>> {
-        val liveData = MutableLiveData<Resource<List<Country>?>>()
-
-        countryRepositiry.get(whenSuccess = {
-            liveData.value = Resource(it)
-        })
-
-        return liveData
+    override fun setView(view: RegisterCountryContract.ViewImpl) {
+        viewMain = view
     }
 
-    fun save(
-        country: Country
-    ): LiveData<Resource<Void?>> {
-        val liveData = MutableLiveData<Resource<Void?>>()
-
-        countryRepositiry.save(country, whenSuccess = {
-            liveData.value = Resource(null)
+    override fun getAll() {
+        countryRepositiry.get(whenSuccess = {
+            viewMain.setList(Resource(it))
         })
-        return liveData
+    }
+
+    override fun save(
+        country: Country
+    ) {
+        countryRepositiry.save(country, whenSuccess = {
+            viewMain.responseSave(Resource(null))
+        })
     }
 
     fun remove(

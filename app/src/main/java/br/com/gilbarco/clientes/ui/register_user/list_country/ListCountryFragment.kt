@@ -11,17 +11,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.Country
-import br.com.gilbarco.clientes.presenter.CountryPresenter
+import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
+import br.com.gilbarco.clientes.ui.RegisterCountryViewModelFactory
 import br.com.gilbarco.clientes.ui.alert
-import br.com.gilbarco.clientes.ui.register_user.RegisterUserViewModel
-import br.com.gilbarco.clientes.ui.register_user.RegisterUserViewModelFactory
+import br.com.gilbarco.clientes.ui.RegisterUserViewModelFactory
 import br.com.gilbarco.clientes.ui.register_user.list_country.adapter.ListCountryAdapter
 import kotlinx.android.synthetic.main.fragment_list_countries.*
 import kotlinx.android.synthetic.main.fragment_list_countries.view.*
 
 class ListCountryFragment : Fragment() {
-    private lateinit var model: RegisterUserViewModel
-    private lateinit var presenter: CountryPresenter
+    private lateinit var model: RegisterCountryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,35 +28,38 @@ class ListCountryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_list_countries, container, false)
-        context?.let {
-            presenter = CountryPresenter(it)
-        }
 
-        setViewModel()
-        getAllUsers()
-        setRecyclerView(root)
+        setViewModel(root)
+        getAllContries()
         return root
     }
 
-    private fun setViewModel() {
-        activity?.let {
-            model = ViewModelProvider(
-                it,
-                RegisterUserViewModelFactory()
-            ).get(RegisterUserViewModel::class.java)
+    private fun setViewModel(root: View) {
+        activity?.let { activity ->
+            context?.let {
+                model = ViewModelProvider(
+                    activity,
+                    RegisterCountryViewModelFactory(it)
+                ).get(RegisterCountryViewModel::class.java)
+                model.init()
+            }
         }
-
-    }
-
-    private fun setRecyclerView(root: View) {
-        model.getCountries().observe(viewLifecycleOwner, Observer { contriesFound ->
-            if (contriesFound != null) {
-                setAdapter(contriesFound, root.lista_countries_recyclerview as RecyclerView)
-                list_no_item.visibility = View.GONE
+        model.countriesResult.observe(viewLifecycleOwner, Observer { resource ->
+            if (resource.error == null) {
+                setRecyclerView(root, resource.data)
             } else {
-                list_no_item.visibility = View.VISIBLE
+                alert("Falha", resource.error)
             }
         })
+    }
+
+    private fun setRecyclerView(root: View, contriesFound: List<Country>?) {
+        if (contriesFound != null) {
+            setAdapter(contriesFound, root.lista_countries_recyclerview as RecyclerView)
+            list_no_item.visibility = View.GONE
+        } else {
+            list_no_item.visibility = View.VISIBLE
+        }
     }
 
     private fun setAdapter(contries: List<Country>, rw: RecyclerView) {
@@ -72,16 +74,7 @@ class ListCountryFragment : Fragment() {
         }
     }
 
-    private fun getAllUsers() {
-        presenter.getAll().observe(viewLifecycleOwner, Observer {
-            if (it.error == null) {
-                model.countries.postValue(it.data)
-                //setRecyclerView()
-            } else {
-                alert("Falha", "Não foi possivel carregar os países")
-            }
-        })
+    private fun getAllContries() {
+        model.getCountries()
     }
-
-
 }

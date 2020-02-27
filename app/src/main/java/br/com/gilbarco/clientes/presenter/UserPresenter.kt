@@ -6,40 +6,34 @@ import androidx.lifecycle.MutableLiveData
 import br.com.gilbarco.clientes.model.Resource
 import br.com.gilbarco.clientes.model.UserRepository
 import br.com.gilbarco.clientes.model.model.User
-import br.com.gilbarco.clientes.ui.register_user.RegisterUserContract
+import br.com.gilbarco.clientes.ui.RegisterUserContract
 
-class UserPresenter (val context: Context): RegisterUserContract.PresenterImpl {
+class UserPresenter(val context: Context) : RegisterUserContract.PresenterImpl {
+    private lateinit var viewMain: RegisterUserContract.ViewImpl
     private val userRepositiry = UserRepository(context)
 
-    fun getAll(): LiveData<Resource<List<User>?>> {
-        val liveData = MutableLiveData<Resource<List<User>?>>()
+    override fun setView(view: RegisterUserContract.ViewImpl) {
+        viewMain = view
+    }
 
+    fun getAll() {
         userRepositiry.get(whenSuccess = {
-            liveData.value = Resource(it)
+            viewMain.setList(Resource(it))
         })
-
-        return liveData
     }
 
-    fun getAllWithCountry(): LiveData<Resource<List<User>?>> {
-        val liveData = MutableLiveData<Resource<List<User>?>>()
-
+    override fun getAllWithCountry() {
         userRepositiry.getWithCountry(whenSuccess = {
-            liveData.value = Resource(it)
+            viewMain.setList(Resource(it))
         })
-
-        return liveData
     }
 
-    fun save(
+    override fun save(
         user: User
-    ): LiveData<Resource<Void?>> {
-        val liveData = MutableLiveData<Resource<Void?>>()
-
+    ) {
         userRepositiry.save(user, whenSuccess = {
-            liveData.value = Resource(null)
+            viewMain.responseSave(Resource(null))
         })
-        return liveData
     }
 
     fun remove(

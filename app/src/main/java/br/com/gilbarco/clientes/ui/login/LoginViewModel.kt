@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import br.com.gilbarco.clientes.model.LoginRepository
 import br.com.gilbarco.clientes.model.Result
 
 import br.com.gilbarco.clientes.R
+import br.com.gilbarco.clientes.presenter.LoginPresenter
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(private val loginPresenter: LoginPresenter) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -19,7 +19,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
+        val result = loginPresenter.login(username, password)
 
         if (result is Result.Success) {
             _loginResult.value =

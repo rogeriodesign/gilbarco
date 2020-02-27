@@ -1,13 +1,8 @@
 package br.com.gilbarco.clientes.model
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import br.com.gilbarco.clientes.model.asynctask.BaseAsyncTask
 import br.com.gilbarco.clientes.model.database.AppDatabase
-import br.com.gilbarco.clientes.model.database.dao.UserDAO
-import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.model.model.User
 import br.com.gilbarco.clientes.model.model.UserCountry
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.gilbarco.clientes.model.LoginDataSource
 import br.com.gilbarco.clientes.model.LoginRepository
+import br.com.gilbarco.clientes.presenter.LoginPresenter
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
@@ -15,11 +16,9 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
-                loginRepository = LoginRepository(
-                    dataSource = LoginDataSource()
-                )
+                loginPresenter = LoginPresenter()
             ) as T
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        throw IllegalArgumentException("Classe ViewModel desconhecida")
     }
 }

@@ -13,7 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.User
-import br.com.gilbarco.clientes.presenter.UserPresenter
+import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
+import br.com.gilbarco.clientes.ui.RegisterCountryViewModelFactory
+import br.com.gilbarco.clientes.ui.RegisterUserViewModel
+import br.com.gilbarco.clientes.ui.RegisterUserViewModelFactory
 import br.com.gilbarco.clientes.ui.alert
 import br.com.gilbarco.clientes.ui.validator.CNPJormatter
 import br.com.gilbarco.clientes.ui.validator.ValidatesCnpj
@@ -25,10 +28,10 @@ import kotlinx.android.synthetic.main.fragment_register_user.view.*
 import br.com.gilbarco.clientes.ui.afterTextChanged
 
 
-class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
+class RegisterUserFragment : Fragment() {
     private val validators = ArrayList<Validator>()
     private lateinit var model: RegisterUserViewModel
-    private lateinit var presenter: UserPresenter
+    private lateinit var modelCountry: RegisterCountryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +39,6 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_register_user, container, false)
-        context?.let {
-            presenter = UserPresenter(it)
-        }
 
         setViewModel()
         setFields(root)
@@ -53,9 +53,28 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
     }
 
     private fun setViewModel() {
-        activity?.let {
-            model = ViewModelProvider(it, RegisterUserViewModelFactory()).get(RegisterUserViewModel::class.java)
+        activity?.let {activity ->
+            context?.let{
+                model = ViewModelProvider(activity,
+                    RegisterUserViewModelFactory(it)
+                ).get(RegisterUserViewModel::class.java)
+                model.init()
+                modelCountry = ViewModelProvider(activity,
+                    RegisterCountryViewModelFactory(it)
+                ).get(RegisterCountryViewModel::class.java)
+                modelCountry.init()
+            }
         }
+        model.saveResult.observe(viewLifecycleOwner, Observer { resource ->
+            if (resource.error == null) {
+                fillForm()
+                resource.data?.let{
+                    alert("Sucesso", it)
+                }
+            } else {
+                alert("Falha", resource.error)
+            }
+        })
     }
 
     private fun fillForm() {
@@ -71,7 +90,7 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
                 (activity_form_register_user_cnpj as TextInputLayout).editText?.setText("")
             }
         })
-        model.getCountrySelected().observe(viewLifecycleOwner, Observer { countryFound ->
+        modelCountry.getCountrySelected().observe(viewLifecycleOwner, Observer { countryFound ->
             Log.i("view user", "pegou país")
             if (countryFound != null) {
                 (activity_form_register_user_country as TextView).text = countryFound.name
@@ -154,7 +173,7 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
         val name = (activity_form_register_user_name as TextInputLayout).editText?.text.toString()
         val cnpj = (activity_form_register_user_cnpj as TextInputLayout).editText?.text.toString()
         val code = ((activity_form_register_user_code as TextInputLayout).editText?.text.toString()).toLong()
-        return User(model.getUser().value?.id, code, name, cnpj, model.getCountrySelected().value?.id)
+        return User(model.getUser().value?.id, code, name, cnpj, modelCountry.getCountrySelected().value?.id)
     }
 
     private fun isFieldsValid(): Boolean {        
@@ -164,21 +183,10 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
                 formStatusValid = false
             }
         }
-        Log.i("view user", "retorno do validador " + formStatusValid)
         return formStatusValid
     }
 
     private fun save(user: User) {
-        presenter.save(user).observe(viewLifecycleOwner, Observer {
-            if (it.error == null) {
-                Log.i("registro pais", "gravou com sucesso")
-                model.user.postValue(null)
-                fillForm()
-                alert("Sucesso", "Cliente ${user.name} gravado com sucesso")
-            } else {
-                Log.i("registro pais", "gravou com erro "+ it.error)
-                alert("Falha", "Não foi possivél gravar o cliente ${user.name}.\n ${it.error}")
-            }
-        })
+        model.save(user)
     }
 }
