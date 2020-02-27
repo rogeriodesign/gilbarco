@@ -61,17 +61,30 @@
                 android:background="@android:color/transparent"
                 android:hint="@string/cnpj"
                 android:importantForAutofill="no"
-                android:inputType="text" />
+                android:inputType="numberSigned" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/activity_label_register_user_country"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/label_country"
+            app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
+            app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
+            app:layout_constraintTop_toBottomOf="@+id/activity_form_register_user_cnpj" />
 
         <TextView
             android:id="@+id/activity_form_register_user_country"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text=""
+            tools:text="Brasil"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_medium"
             app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
             app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
-            app:layout_constraintTop_toBottomOf="@+id/activity_form_register_user_cnpj" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_label_register_user_country" />
 
         <Button
             android:id="@+id/fragment_form_bt_country"
@@ -79,7 +92,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/bt_country"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
             app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
             app:layout_constraintTop_toBottomOf="@id/activity_form_register_user_country" />
@@ -91,6 +105,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/bt_register"
             android:background="@color/colorAccent"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/activity_form_register_user_code"
             app:layout_constraintStart_toStartOf="@id/activity_form_register_user_code"
             app:layout_constraintTop_toBottomOf="@id/fragment_form_bt_country" />

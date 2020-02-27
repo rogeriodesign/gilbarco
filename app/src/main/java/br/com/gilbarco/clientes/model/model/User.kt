@@ -7,16 +7,17 @@ import androidx.room.*
 data class User(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "user_id")
-    val id: Long? = 0,
+    var id: Long? = 0L,
     @ColumnInfo(name = "user_code")
-    val code: Long = 0,
+    var code: Long = 0L,
     @ColumnInfo(name = "user_name")
-    val name: String = "",
+    var name: String = "",
     @ColumnInfo(name = "user_cnpj")
-    val cnpj: String = "",
+    var cnpj: String = "",
     @ColumnInfo(name = "user_country_id")
-    val countryId: Long = 0,
-    var country: String? = null
+    var countryId: Long? = 0L,
+    @Ignore
+    var country: Country? = null
 )
 
 /*@Entity(foreignKeys = [ForeignKey(entity = User::class, parentColumns = arrayOf("id"), childColumns = arrayOf("userId")),
@@ -42,7 +43,7 @@ data class UserCountry(
     val country: Country?
 ) {
     fun bind(): User {
-        user.country = country?.name
+        user.country = country
         return user
     }
 }

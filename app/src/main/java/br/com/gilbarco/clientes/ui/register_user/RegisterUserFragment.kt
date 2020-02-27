@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,8 @@ import br.com.gilbarco.clientes.ui.validator.Validator
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_register_user.*
 import kotlinx.android.synthetic.main.fragment_register_user.view.*
+import br.com.gilbarco.clientes.ui.afterTextChanged
+
 
 class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
     private val validators = ArrayList<Validator>()
@@ -33,27 +36,30 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_register_user, container, false)
-        //val textView: TextView = root.findViewById(R.id.text_send)
         context?.let {
             presenter = UserPresenter(it)
         }
 
         setViewModel()
         setFields(root)
-        fillForm()
+        setBtCountry(root)
+        setBtRegister(root)
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        fillForm()
+    }
+
     private fun setViewModel() {
-        Log.i("view user", "setou viewmodel")
-        model = ViewModelProvider(this, RegisterUserViewModelFactory()).get(RegisterUserViewModel::class.java)
-        // model.getTextWeb().observe(viewLifecycleOwner, Observer<String> { text ->
-        //presenter.updateTextWeb(text)
-        // })
+        activity?.let {
+            model = ViewModelProvider(it, RegisterUserViewModelFactory()).get(RegisterUserViewModel::class.java)
+        }
     }
 
     private fun fillForm() {
-        Log.i("view user", "preencheu form")
+        Log.i("view user", "preenchendo o form")
         model.getUser().observe(viewLifecycleOwner, Observer { userFound ->
             if (userFound != null) {
                 (activity_form_register_user_code as TextInputLayout).editText?.setText(userFound.code.toString())
@@ -65,14 +71,37 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
                 (activity_form_register_user_cnpj as TextInputLayout).editText?.setText("")
             }
         })
+        model.getCountrySelected().observe(viewLifecycleOwner, Observer { countryFound ->
+            Log.i("view user", "pegou país")
+            if (countryFound != null) {
+                (activity_form_register_user_country as TextView).text = countryFound.name
+            } else {
+                (activity_form_register_user_country as TextView).text = ""
+            }
+        })
     }
 
     private fun setFields(root: View) {
-        addValidatorDefault(root.activity_form_register_user_code as TextInputLayout)
-        addValidatorDefault(root.activity_form_register_user_name as TextInputLayout)
-        addValidatorCnpj(root.activity_form_register_user_cnpj as TextInputLayout)
-        setBtCountry(root)
-        setBtRegister(root)
+        val code = root.activity_form_register_user_code as TextInputLayout
+        val name = root.activity_form_register_user_name as TextInputLayout
+        val cnpj = root.activity_form_register_user_cnpj as TextInputLayout
+        addValidatorDefault(code)
+        addValidatorDefault(name)
+        addValidatorCnpj(cnpj)
+
+        code.editText?.afterTextChanged {
+            model.setCode(it)
+            Log.i("registro usuario", model.getUser().toString())
+            Log.i("registro usuario", model.getUser().value.toString())
+        }
+        name.editText?.afterTextChanged {
+            model.setName(it)
+            Log.i("registro usuario", model.getUser().value.toString())
+        }
+        cnpj.editText?.afterTextChanged {
+            model.setCnpj(it)
+            Log.i("registro usuario", model.getUser().value.toString())
+        }
     }
 
     private fun setBtCountry(root: View) = root.fragment_form_bt_country.setOnClickListener {
@@ -125,11 +154,10 @@ class RegisterUserFragment : Fragment(), RegisterUserContract.ViewImpl {
         val name = (activity_form_register_user_name as TextInputLayout).editText?.text.toString()
         val cnpj = (activity_form_register_user_cnpj as TextInputLayout).editText?.text.toString()
         val code = ((activity_form_register_user_code as TextInputLayout).editText?.text.toString()).toLong()
-        return User(model.getUser().value?.id, code, name, cnpj, 1)
+        return User(model.getUser().value?.id, code, name, cnpj, model.getCountrySelected().value?.id)
     }
 
-    private fun isFieldsValid(): Boolean {
-        Log.i("view user", "dentro do validador")
+    private fun isFieldsValid(): Boolean {        
         var formStatusValid = true
         for (validador in validators) {
             if (!validador.statusValid()) {

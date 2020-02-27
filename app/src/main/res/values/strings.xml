@@ -30,4 +30,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Senha deve ter mais de 5 caracteres</string>
     <string name="login_failed">"Falha no login"</string>
+    <string name="no_item">Nenhum item cadastrado</string>
+    <string name="label_country">País</string>
 </resources>

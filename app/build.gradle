@@ -30,6 +30,7 @@ dependencies {
     implementation "androidx.room:room-runtime:2.2.4"
     implementation 'androidx.annotation:annotation:1.0.2'
     kapt "androidx.room:room-compiler:2.2.4"
+    implementation "androidx.room:room-ktx:2.2.4"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

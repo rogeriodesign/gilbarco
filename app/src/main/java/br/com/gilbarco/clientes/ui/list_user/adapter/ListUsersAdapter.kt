@@ -49,7 +49,7 @@ class ListUsersAdapter(val context: Context): RecyclerView.Adapter<ListUsersAdap
         private fun fillField(user: User) {
             name.text = user.name
             if(user.country != null){
-                cnpj.text = user.country
+                cnpj.text = user.country?.name
             } else {
                 cnpj.text = user.cnpj
             }

@@ -13,4 +13,30 @@ class RegisterCountryViewModel: ViewModel() {
     fun getCountry(): LiveData<Country> {
         return country
     }
+
+    fun setName(text : String){
+        if(country.value != null) {
+            country.value!!.name = text
+        } else {
+            country.value = Country(name = text)
+        }
+    }
+
+    fun setCode(text : String){
+        if(text!=null && text.isNotEmpty()) {
+            if (country.value != null) {
+                country.value!!.code = text.toLong()
+            } else {
+                country.value = Country(code = text.toLong())
+            }
+        }
+    }
+
+    fun setDescription(text : String){
+        if(country.value != null) {
+            country.value!!.description = text
+        } else {
+            country.value = Country(description = text)
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package br.com.gilbarco.clientes.ui.list_user
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +42,14 @@ class ListUserFragment : Fragment() {
 
     private fun setRecyclerView(root: View) {
         model.getUsers().observe(viewLifecycleOwner, Observer { usersFound ->
-            usersFound?.let {
-                setAdapter(it, root.lista_users_recyclerview as RecyclerView)
+            Log.i("list user", usersFound.toString())
+            if(usersFound != null && usersFound.isNotEmpty()){
+                Log.i("list user", "tem lista")
+                setAdapter(usersFound, root.lista_users_recyclerview as RecyclerView)
+                root.list_no_item.visibility = View.GONE
+            } else {
+                Log.i("list user", "não tem lista")
+                root.list_no_item.visibility = View.VISIBLE
             }
         })
     }

@@ -2,8 +2,8 @@ package br.com.gilbarco.clientes.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import br.com.gilbarco.clientes.data.LoginDataSource
-import br.com.gilbarco.clientes.data.LoginRepository
+import br.com.gilbarco.clientes.model.LoginDataSource
+import br.com.gilbarco.clientes.model.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

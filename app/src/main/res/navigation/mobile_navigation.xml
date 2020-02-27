@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_list_countries"
-        android:name="br.com.gilbarco.clientes.ui.list_country.ListCountryFragment"
+        android:name="br.com.gilbarco.clientes.ui.register_user.list_country.ListCountryFragment"
         android:label="@string/label_list_country"
         tools:layout="@layout/fragment_list_countries" >
         <action

@@ -1,4 +1,4 @@
-package br.com.gilbarco.clientes.ui.list_country
+package br.com.gilbarco.clientes.ui.register_user.list_country
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,12 +13,14 @@ import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.presenter.CountryPresenter
 import br.com.gilbarco.clientes.ui.alert
-import br.com.gilbarco.clientes.ui.list_country.adapter.ListCountryAdapter
+import br.com.gilbarco.clientes.ui.register_user.RegisterUserViewModel
+import br.com.gilbarco.clientes.ui.register_user.RegisterUserViewModelFactory
+import br.com.gilbarco.clientes.ui.register_user.list_country.adapter.ListCountryAdapter
+import kotlinx.android.synthetic.main.fragment_list_countries.*
 import kotlinx.android.synthetic.main.fragment_list_countries.view.*
-import kotlinx.android.synthetic.main.fragment_list_users.view.*
 
 class ListCountryFragment : Fragment() {
-    private lateinit var model: ListCountryViewModel
+    private lateinit var model: RegisterUserViewModel
     private lateinit var presenter: CountryPresenter
 
     override fun onCreateView(
@@ -38,20 +40,29 @@ class ListCountryFragment : Fragment() {
     }
 
     private fun setViewModel() {
-        model = ViewModelProvider(this, ListCountryViewModelFactory()).get(ListCountryViewModel::class.java)
+        activity?.let {
+            model = ViewModelProvider(
+                it,
+                RegisterUserViewModelFactory()
+            ).get(RegisterUserViewModel::class.java)
+        }
+
     }
 
     private fun setRecyclerView(root: View) {
         model.getCountries().observe(viewLifecycleOwner, Observer { contriesFound ->
-            contriesFound?.let {
-                setAdapter(it, root.lista_countries_recyclerview as RecyclerView)
+            if (contriesFound != null) {
+                setAdapter(contriesFound, root.lista_countries_recyclerview as RecyclerView)
+                list_no_item.visibility = View.GONE
+            } else {
+                list_no_item.visibility = View.VISIBLE
             }
         })
     }
 
     private fun setAdapter(contries: List<Country>, rw: RecyclerView) {
         context?.let {
-            val adapter = ListCountryAdapter(it){country ->
+            val adapter = ListCountryAdapter(it) { country ->
                 model.countrySelected.postValue(country)
                 findNavController().navigate(R.id.action_nav_list_countries_to_nav_add_user)
             }.apply {
@@ -61,7 +72,7 @@ class ListCountryFragment : Fragment() {
         }
     }
 
-    private fun getAllUsers(){
+    private fun getAllUsers() {
         presenter.getAll().observe(viewLifecycleOwner, Observer {
             if (it.error == null) {
                 model.countries.postValue(it.data)

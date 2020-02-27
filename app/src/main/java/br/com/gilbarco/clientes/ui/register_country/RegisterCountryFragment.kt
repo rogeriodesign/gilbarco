@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.presenter.CountryPresenter
+import br.com.gilbarco.clientes.ui.afterTextChanged
 import br.com.gilbarco.clientes.ui.alert
 import br.com.gilbarco.clientes.ui.validator.ValidatesDefault
 import br.com.gilbarco.clientes.ui.validator.Validator
@@ -36,15 +37,17 @@ class RegisterCountryFragment : Fragment(), RegisterCountryContract.ViewImpl {
 
         setViewModel()
         setFields(root)
-        fillForm()
+        setBtRegister(root)
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fillForm()
     }
 
     private fun setViewModel() {
         model = ViewModelProvider(this, RegisterCountryViewModelFactory()).get(RegisterCountryViewModel::class.java)
-       // model.getTextWeb().observe(viewLifecycleOwner, Observer<String> { text ->
-           //presenter.updateTextWeb(text)
-       // })
     }
 
     private fun fillForm() {
@@ -62,10 +65,21 @@ class RegisterCountryFragment : Fragment(), RegisterCountryContract.ViewImpl {
     }
 
     private fun setFields(root: View) {
-        addValidatorDefault(root.activity_form_register_country_code as TextInputLayout)
-        addValidatorDefault(root.activity_form_register_country_name as TextInputLayout)
-        addValidatorDefault(root.activity_form_register_country_description as TextInputLayout)
-        setBtRegister(root)
+        val code = root.activity_form_register_country_code as TextInputLayout
+        val name = root.activity_form_register_country_name as TextInputLayout
+        val description= root.activity_form_register_country_description as TextInputLayout
+        addValidatorDefault(code)
+        addValidatorDefault(name)
+        addValidatorDefault(description)
+        code.editText?.afterTextChanged {
+            model.setCode(it)
+        }
+        name.editText?.afterTextChanged {
+            model.setName(it)
+        }
+        description.editText?.afterTextChanged {
+            model.setDescription(it)
+        }
     }
 
     private fun setBtRegister(root: View) = root.activity_form_bt_register.setOnClickListener {

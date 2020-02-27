@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import br.com.gilbarco.clientes.data.LoginRepository
-import br.com.gilbarco.clientes.data.Result
+import br.com.gilbarco.clientes.model.LoginRepository
+import br.com.gilbarco.clientes.model.Result
 
 import br.com.gilbarco.clientes.R
 

@@ -1,4 +1,4 @@
-package br.com.gilbarco.clientes.data
+package br.com.gilbarco.clientes.model
 
 /**
  * A generic class that holds a value with its loading status.

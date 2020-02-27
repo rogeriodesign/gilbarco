@@ -1,6 +1,6 @@
-package br.com.gilbarco.clientes.data
+package br.com.gilbarco.clientes.model
 
-import br.com.gilbarco.clientes.data.model.LoggedInUser
+import br.com.gilbarco.clientes.model.model.LoggedInUser
 
 /**
  * Class that requests authentication and user information from the remote data source and
