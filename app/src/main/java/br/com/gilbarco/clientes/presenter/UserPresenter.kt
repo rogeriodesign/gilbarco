@@ -38,35 +38,23 @@ class UserPresenter(val context: Context) : RegisterUserContract.PresenterImpl {
 
     fun remove(
         user: User
-    ): LiveData<Resource<Void?>> {
-        val liveData = MutableLiveData<Resource<Void?>>()
+    ) {
         userRepositiry.remove(user, whenSuccess = {
-            liveData.value = Resource(null)
         })
-
-        return liveData
     }
 
     fun update(
         user: User
-    ): LiveData<Resource<Void?>> {
-        val liveData = MutableLiveData<Resource<Void?>>()
+    ) {
         userRepositiry.save(user, whenSuccess = {
-            liveData.value = Resource(null)
         })
-        return liveData
     }
 
     fun findForId(
         userId: Long
-    ): LiveData<Resource<User?>> {
-        val liveData = MutableLiveData<Resource<User?>>()
-
+    ) {
         userRepositiry.find(userId,
             whenSuccess = {
-                liveData.value = Resource(it)
             })
-
-        return liveData
     }
 }

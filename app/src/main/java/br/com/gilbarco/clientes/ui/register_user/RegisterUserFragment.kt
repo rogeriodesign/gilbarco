@@ -65,11 +65,13 @@ class RegisterUserFragment : Fragment() {
                 modelCountry.init()
             }
         }
-        model.saveResult.observe(viewLifecycleOwner, Observer { resource ->
+        model.saveResult.observe(viewLifecycleOwner, Observer {
+            val resource = it ?: return@Observer
+
             if (resource.error == null) {
                 fillForm()
-                resource.data?.let{
-                    alert("Sucesso", it)
+                resource.data?.let{txt ->
+                    alert("Sucesso", txt)
                 }
             } else {
                 alert("Falha", resource.error)
@@ -78,7 +80,6 @@ class RegisterUserFragment : Fragment() {
     }
 
     private fun fillForm() {
-        Log.i("view user", "preenchendo o form")
         model.getUser().observe(viewLifecycleOwner, Observer { userFound ->
             if (userFound != null) {
                 (activity_form_register_user_code as TextInputLayout).editText?.setText(userFound.code.toString())
@@ -91,7 +92,6 @@ class RegisterUserFragment : Fragment() {
             }
         })
         modelCountry.getCountrySelected().observe(viewLifecycleOwner, Observer { countryFound ->
-            Log.i("view user", "pegou país")
             if (countryFound != null) {
                 (activity_form_register_user_country as TextView).text = countryFound.name
             } else {
@@ -110,16 +110,12 @@ class RegisterUserFragment : Fragment() {
 
         code.editText?.afterTextChanged {
             model.setCode(it)
-            Log.i("registro usuario", model.getUser().toString())
-            Log.i("registro usuario", model.getUser().value.toString())
         }
         name.editText?.afterTextChanged {
             model.setName(it)
-            Log.i("registro usuario", model.getUser().value.toString())
         }
         cnpj.editText?.afterTextChanged {
             model.setCnpj(it)
-            Log.i("registro usuario", model.getUser().value.toString())
         }
     }
 

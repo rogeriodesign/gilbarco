@@ -50,11 +50,13 @@ class RegisterCountryFragment : Fragment() {
                 model.init()
             }
         }
-        model.saveResult.observe(viewLifecycleOwner, Observer { resource ->
+        model.saveResult.observe(viewLifecycleOwner, Observer {
+            val resource = it ?: return@Observer
+
             if (resource.error == null) {
                 fillForm()
-                resource.data?.let{
-                    alert("Sucesso", it)
+                resource.data?.let{txt ->
+                    alert("Sucesso", txt)
                 }
             } else {
                 alert("Falha", resource.error)
@@ -117,7 +119,7 @@ class RegisterCountryFragment : Fragment() {
         val name = (activity_form_register_country_name as TextInputLayout).editText?.text.toString()
         val description = (activity_form_register_country_description as TextInputLayout).editText?.text.toString()
         val code = ((activity_form_register_country_code as TextInputLayout).editText?.text.toString()).toLong()
-        return Country(model.getCountry().value?.id, code, name, description)
+        return Country(code= code, name=name, description =description)
     }
 
     private fun isFieldsValid(): Boolean {

@@ -33,35 +33,23 @@ class CountryPresenter (val context: Context): RegisterCountryContract.Presenter
 
     fun remove(
         country: Country
-    ): LiveData<Resource<Void?>> {
-        val liveData = MutableLiveData<Resource<Void?>>()
+    ) {
         countryRepositiry.remove(country, whenSuccess = {
-            liveData.value = Resource(null)
         })
-
-        return liveData
     }
 
     fun update(
         country: Country
-    ): LiveData<Resource<Void?>> {
-        val liveData = MutableLiveData<Resource<Void?>>()
+    ) {
         countryRepositiry.save(country, whenSuccess = {
-            liveData.value = Resource(null)
         })
-        return liveData
     }
 
     fun findForId(
         countryId: Long
-    ): LiveData<Resource<Country?>> {
-        val liveData = MutableLiveData<Resource<Country?>>()
-
+    ) {
         countryRepositiry.find(countryId,
             whenSuccess = {
-                liveData.value = Resource(it)
             })
-
-        return liveData
     }
 }

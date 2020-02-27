@@ -9,7 +9,7 @@ import br.com.gilbarco.clientes.model.Result
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.presenter.LoginPresenter
 
-class LoginViewModel(private val loginPresenter: LoginPresenter) : ViewModel() {
+class LoginViewModel(private val loginPresenter: LoginPresenter) : ViewModel(), LoginContract.ViewImpl {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -17,8 +17,7 @@ class LoginViewModel(private val loginPresenter: LoginPresenter) : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
+    override fun login(username: String, password: String) {
         val result = loginPresenter.login(username, password)
 
         if (result is Result.Success) {
