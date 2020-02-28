@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.gilbarco.clientes.model.Resource
-import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.model.model.User
 import br.com.gilbarco.clientes.presenter.UserPresenter
 
-class RegisterUserViewModel(private val userPresenter: UserPresenter): ViewModel(),
-    RegisterUserContract.ViewImpl {
+class UserViewModel(private val userPresenter: UserPresenter): ViewModel(),
+    UserContract.ViewImpl {
 
     val user = MutableLiveData<User>()
-    val users = MutableLiveData<List<User>>()
     private val _saveResult = MutableLiveData<Resource<String>>()
     val saveResult: LiveData<Resource<String>> = _saveResult
     private val _usersResult = MutableLiveData<Resource<List<User>?>>()
@@ -38,7 +36,6 @@ class RegisterUserViewModel(private val userPresenter: UserPresenter): ViewModel
 
     override fun setList(resource: Resource<List<User>?>) {
         if (resource.error == null) {
-            users.value = resource.data
             _usersResult.value = resource
         } else {
             _usersResult.value = Resource(data= null, error = "Não foi possível carregar os clientes.\n${resource.error}")
@@ -51,6 +48,10 @@ class RegisterUserViewModel(private val userPresenter: UserPresenter): ViewModel
 
     fun getUser(): LiveData<User> {
         return user
+    }
+
+    fun resetSaveResult(){
+        _saveResult.value = null
     }
 
     fun setName(text : String){

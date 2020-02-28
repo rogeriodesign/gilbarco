@@ -1,7 +1,6 @@
 package br.com.gilbarco.clientes.ui.list_user
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.User
 import br.com.gilbarco.clientes.presenter.UserPresenter
-import br.com.gilbarco.clientes.ui.RegisterUserViewModel
-import br.com.gilbarco.clientes.ui.RegisterUserViewModelFactory
+import br.com.gilbarco.clientes.ui.UserViewModel
+import br.com.gilbarco.clientes.ui.UserViewModelFactory
 import br.com.gilbarco.clientes.ui.alert
 import br.com.gilbarco.clientes.ui.list_user.adapter.ListUsersAdapter
 import kotlinx.android.synthetic.main.fragment_list_users.view.*
 
 class ListUserFragment : Fragment() {
-    private lateinit var model: RegisterUserViewModel
+    private lateinit var model: UserViewModel
     private lateinit var presenter: UserPresenter
 
     override fun onCreateView(
@@ -41,8 +40,8 @@ class ListUserFragment : Fragment() {
         activity?.let {activity ->
             context?.let{
                 model = ViewModelProvider(activity,
-                    RegisterUserViewModelFactory(it)
-                ).get(RegisterUserViewModel::class.java)
+                    UserViewModelFactory(it)
+                ).get(UserViewModel::class.java)
                 model.init()
             }
         }

@@ -1,18 +1,16 @@
 package br.com.gilbarco.clientes.presenter
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import br.com.gilbarco.clientes.model.Resource
 import br.com.gilbarco.clientes.model.UserRepository
 import br.com.gilbarco.clientes.model.model.User
-import br.com.gilbarco.clientes.ui.RegisterUserContract
+import br.com.gilbarco.clientes.ui.UserContract
 
-class UserPresenter(val context: Context) : RegisterUserContract.PresenterImpl {
-    private lateinit var viewMain: RegisterUserContract.ViewImpl
+class UserPresenter(val context: Context) : UserContract.PresenterImpl {
+    private lateinit var viewMain: UserContract.ViewImpl
     private val userRepositiry = UserRepository(context)
 
-    override fun setView(view: RegisterUserContract.ViewImpl) {
+    override fun setView(view: UserContract.ViewImpl) {
         viewMain = view
     }
 

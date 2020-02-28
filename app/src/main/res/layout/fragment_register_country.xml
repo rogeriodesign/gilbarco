@@ -24,7 +24,10 @@ android:layout_height="match_parent">
             android:background="@android:color/transparent"
             android:hint="@string/code"
             android:importantForAutofill="no"
-            android:inputType="number" />
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -42,7 +45,10 @@ android:layout_height="match_parent">
             android:background="@android:color/transparent"
             android:hint="@string/name"
             android:importantForAutofill="no"
-            android:inputType="textCapWords" />
+            android:inputType="textCapWords"
+            android:selectAllOnFocus="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +66,10 @@ android:layout_height="match_parent">
             android:background="@android:color/transparent"
             android:hint="@string/description"
             android:importantForAutofill="no"
-            android:inputType="textMultiLine|textCapSentences" />
+            android:inputType="textMultiLine|textCapSentences"
+            android:selectAllOnFocus="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -1,6 +1,7 @@
 package br.com.gilbarco.clientes.ui
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,11 +9,10 @@ import br.com.gilbarco.clientes.model.Resource
 import br.com.gilbarco.clientes.model.model.Country
 import br.com.gilbarco.clientes.presenter.CountryPresenter
 
-class RegisterCountryViewModel(private val countryPresenter: CountryPresenter): ViewModel(),
-    RegisterCountryContract.ViewImpl {
+class CountryViewModel(private val countryPresenter: CountryPresenter): ViewModel(),
+    CountryContract.ViewImpl {
 
     val country = MutableLiveData<Country>()
-    val countries = MutableLiveData<List<Country>>()
     val countrySelected = MutableLiveData<Country>()
 
     private val _saveResult = MutableLiveData<Resource<String>>()
@@ -38,7 +38,6 @@ class RegisterCountryViewModel(private val countryPresenter: CountryPresenter): 
 
     override fun setList(resource: Resource<List<Country>?>) {
         if (resource.error == null) {
-            countries.value = resource.data
             _countriesResult.value = resource
         } else {
             _countriesResult.value = Resource(data= null, error = "Não foi possivel carregar os países.\n${resource.error}")
@@ -53,8 +52,16 @@ class RegisterCountryViewModel(private val countryPresenter: CountryPresenter): 
         return country
     }
 
+    fun resetSaveResult(){
+        _saveResult.value = null
+    }
+
     fun getCountrySelected(): LiveData<Country> {
         return countrySelected
+    }
+
+    fun resetCountrySelected(){
+        countrySelected.value = null
     }
 
     fun setName(text : String){
@@ -66,8 +73,10 @@ class RegisterCountryViewModel(private val countryPresenter: CountryPresenter): 
     }
 
     fun setCode(text : String){
+        Log.i("campo code",text)
         if(text!=null && text.isNotEmpty()) {
             if (country.value != null) {
+                Log.i("campo code convert",text.toLong().toString())
                 country.value!!.code = text.toLong()
             } else {
                 country.value = Country(code = text.toLong())

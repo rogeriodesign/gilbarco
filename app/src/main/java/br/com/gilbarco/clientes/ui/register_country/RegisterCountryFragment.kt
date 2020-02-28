@@ -1,6 +1,7 @@
 package br.com.gilbarco.clientes.ui.register_country
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.Country
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModelFactory
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
+import br.com.gilbarco.clientes.ui.CountryViewModelFactory
+import br.com.gilbarco.clientes.ui.CountryViewModel
 import br.com.gilbarco.clientes.ui.afterTextChanged
 import br.com.gilbarco.clientes.ui.alert
 import br.com.gilbarco.clientes.ui.validator.ValidatesDefault
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_register_country.view.*
 
 class RegisterCountryFragment : Fragment() {
     private val validators = ArrayList<Validator>()
-    private lateinit var model: RegisterCountryViewModel
+    private lateinit var model: CountryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,21 +46,22 @@ class RegisterCountryFragment : Fragment() {
         activity?.let {activity ->
             context?.let{
                 model = ViewModelProvider(activity,
-                    RegisterCountryViewModelFactory(it)
-                ).get(RegisterCountryViewModel::class.java)
+                    CountryViewModelFactory(it)
+                ).get(CountryViewModel::class.java)
                 model.init()
             }
         }
         model.saveResult.observe(viewLifecycleOwner, Observer {
-            val resource = it ?: return@Observer
-
-            if (resource.error == null) {
-                fillForm()
-                resource.data?.let{txt ->
-                    alert("Sucesso", txt)
+            if(it != null) {
+                if (it.error == null) {
+                    fillForm()
+                    it.data?.let { txt ->
+                        alert("Sucesso", txt)
+                    }
+                } else {
+                    alert("Falha", it.error)
                 }
-            } else {
-                alert("Falha", resource.error)
+                model.resetSaveResult()
             }
         })
     }
@@ -67,10 +69,12 @@ class RegisterCountryFragment : Fragment() {
     private fun fillForm() {
         model.getCountry().observe(viewLifecycleOwner, Observer { userFound ->
             if (userFound != null) {
+                Log.i("recupera texto","com texto texto")
                 (activity_form_register_country_code as TextInputLayout).editText?.setText(userFound.code.toString())
                 (activity_form_register_country_name as TextInputLayout).editText?.setText(userFound.name)
                 (activity_form_register_country_description as TextInputLayout).editText?.setText(userFound.description)
             } else {
+                Log.i("recupera texto","sem texto")
                 (activity_form_register_country_code as TextInputLayout).editText?.setText("")
                 (activity_form_register_country_name as TextInputLayout).editText?.setText("")
                 (activity_form_register_country_description as TextInputLayout).editText?.setText("")
@@ -98,7 +102,6 @@ class RegisterCountryFragment : Fragment() {
 
     private fun setBtRegister(root: View) = root.activity_form_bt_register.setOnClickListener {
         val country = preparesToSave()
-        model.country.postValue(country)
         if (isFieldsValid()) {
             save(country)
         }

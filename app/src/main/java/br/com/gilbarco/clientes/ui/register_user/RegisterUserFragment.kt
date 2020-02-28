@@ -1,7 +1,6 @@
 package br.com.gilbarco.clientes.ui.register_user
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.User
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModelFactory
-import br.com.gilbarco.clientes.ui.RegisterUserViewModel
-import br.com.gilbarco.clientes.ui.RegisterUserViewModelFactory
+import br.com.gilbarco.clientes.ui.CountryViewModel
+import br.com.gilbarco.clientes.ui.CountryViewModelFactory
+import br.com.gilbarco.clientes.ui.UserViewModel
+import br.com.gilbarco.clientes.ui.UserViewModelFactory
 import br.com.gilbarco.clientes.ui.alert
 import br.com.gilbarco.clientes.ui.validator.CNPJormatter
 import br.com.gilbarco.clientes.ui.validator.ValidatesCnpj
@@ -30,8 +29,8 @@ import br.com.gilbarco.clientes.ui.afterTextChanged
 
 class RegisterUserFragment : Fragment() {
     private val validators = ArrayList<Validator>()
-    private lateinit var model: RegisterUserViewModel
-    private lateinit var modelCountry: RegisterCountryViewModel
+    private lateinit var model: UserViewModel
+    private lateinit var modelCountry: CountryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,25 +55,27 @@ class RegisterUserFragment : Fragment() {
         activity?.let {activity ->
             context?.let{
                 model = ViewModelProvider(activity,
-                    RegisterUserViewModelFactory(it)
-                ).get(RegisterUserViewModel::class.java)
+                    UserViewModelFactory(it)
+                ).get(UserViewModel::class.java)
                 model.init()
                 modelCountry = ViewModelProvider(activity,
-                    RegisterCountryViewModelFactory(it)
-                ).get(RegisterCountryViewModel::class.java)
+                    CountryViewModelFactory(it)
+                ).get(CountryViewModel::class.java)
                 modelCountry.init()
             }
         }
         model.saveResult.observe(viewLifecycleOwner, Observer {
-            val resource = it ?: return@Observer
-
-            if (resource.error == null) {
-                fillForm()
-                resource.data?.let{txt ->
-                    alert("Sucesso", txt)
+            if(it != null) {
+                if (it.error == null) {
+                    fillForm()
+                    it.data?.let{txt ->
+                        alert("Sucesso", txt)
+                    }
+                } else {
+                    alert("Falha", it.error)
                 }
-            } else {
-                alert("Falha", resource.error)
+                model.resetSaveResult()
+                modelCountry.resetCountrySelected()
             }
         })
     }

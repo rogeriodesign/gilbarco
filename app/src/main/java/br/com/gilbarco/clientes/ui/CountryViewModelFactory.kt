@@ -4,13 +4,12 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.gilbarco.clientes.presenter.CountryPresenter
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
 
-class RegisterCountryViewModelFactory(private val context: Context): ViewModelProvider.Factory {
+class CountryViewModelFactory(private val context: Context): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RegisterCountryViewModel::class.java)) {
-            return RegisterCountryViewModel(
+        if (modelClass.isAssignableFrom(CountryViewModel::class.java)) {
+            return CountryViewModel(
                 CountryPresenter(context)
             ) as T
         }

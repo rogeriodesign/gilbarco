@@ -11,16 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import br.com.gilbarco.clientes.R
 import br.com.gilbarco.clientes.model.model.Country
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModel
-import br.com.gilbarco.clientes.ui.RegisterCountryViewModelFactory
+import br.com.gilbarco.clientes.ui.CountryViewModel
+import br.com.gilbarco.clientes.ui.CountryViewModelFactory
 import br.com.gilbarco.clientes.ui.alert
-import br.com.gilbarco.clientes.ui.RegisterUserViewModelFactory
 import br.com.gilbarco.clientes.ui.register_user.list_country.adapter.ListCountryAdapter
 import kotlinx.android.synthetic.main.fragment_list_countries.*
 import kotlinx.android.synthetic.main.fragment_list_countries.view.*
 
 class ListCountryFragment : Fragment() {
-    private lateinit var model: RegisterCountryViewModel
+    private lateinit var model: CountryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,8 +38,8 @@ class ListCountryFragment : Fragment() {
             context?.let {
                 model = ViewModelProvider(
                     activity,
-                    RegisterCountryViewModelFactory(it)
-                ).get(RegisterCountryViewModel::class.java)
+                    CountryViewModelFactory(it)
+                ).get(CountryViewModel::class.java)
                 model.init()
             }
         }
@@ -68,6 +67,9 @@ class ListCountryFragment : Fragment() {
                 model.countrySelected.postValue(country)
                 findNavController().navigate(R.id.action_nav_list_countries_to_nav_add_user)
             }.apply {
+                model.getCountrySelected()?.value?.let{
+                    itemSelected = it
+                }
                 items = contries
             }
             rw.adapter = adapter

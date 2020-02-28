@@ -3,7 +3,7 @@ package br.com.gilbarco.clientes.ui
 import br.com.gilbarco.clientes.model.Resource
 import br.com.gilbarco.clientes.model.model.User
 
-interface RegisterUserContract {
+interface UserContract {
     interface ViewImpl {
         fun responseSave(resource: Resource<Void?>)
         fun save(user: User)

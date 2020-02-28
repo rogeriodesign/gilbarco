@@ -7,7 +7,7 @@ import androidx.room.*
 data class User(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "user_id")
-    var id: Long? = 0L,
+    var id: Long? = null,
     @ColumnInfo(name = "user_code")
     var code: Long = 0L,
     @ColumnInfo(name = "user_name")
@@ -15,7 +15,7 @@ data class User(
     @ColumnInfo(name = "user_cnpj")
     var cnpj: String = "",
     @ColumnInfo(name = "user_country_id")
-    var countryId: Long? = 0L,
+    var countryId: Long? = null,
     @Ignore
     var country: Country? = null
 )

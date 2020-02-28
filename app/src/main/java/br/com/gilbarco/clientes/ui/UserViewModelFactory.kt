@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.gilbarco.clientes.presenter.UserPresenter
 
-class RegisterUserViewModelFactory(private val context: Context): ViewModelProvider.Factory {
+class UserViewModelFactory(private val context: Context): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RegisterUserViewModel::class.java)) {
-            return RegisterUserViewModel(
+        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+            return UserViewModel(
                 UserPresenter(
                     context
                 )

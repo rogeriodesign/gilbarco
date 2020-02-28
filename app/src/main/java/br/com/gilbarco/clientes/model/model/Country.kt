@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "countries")
 data class Country(
     @PrimaryKey(autoGenerate = true)
-    var id: Long? = 0L,
+    var id: Long? = null,
     var code: Long? = 0L,
     var name: String? = "",
     var description: String? = ""
